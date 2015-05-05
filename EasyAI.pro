@@ -19,7 +19,10 @@ SOURCES += main.cpp\
     neuronwidget.cpp \
     inputneuron.cpp \
     outputneuron.cpp \
-    connection.cpp
+    connection.cpp \
+    inputneuronwindow.cpp \
+    ann/dataio.cpp \
+    createnetworkwindow.cpp
 
 HEADERS  += mainwindow.hpp \
     ann/feedforwardnetwork.hpp \
@@ -27,8 +30,13 @@ HEADERS  += mainwindow.hpp \
     neuronwidget.hpp \
     inputneuron.hpp \
     outputneuron.hpp \
-    connection.hpp
+    connection.hpp \
+    inputneuronwindow.hpp \
+    ann/dataio.hpp \
+    createnetworkwindow.hpp
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    inputneuronwindow.ui \
+    createnetworkwindow.ui
 
 INCLUDEPATH += ann

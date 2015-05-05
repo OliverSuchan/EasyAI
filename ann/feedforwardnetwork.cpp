@@ -74,6 +74,33 @@ double FeedForwardNetwork::getInput(std::size_t p_idxNeuron)
     return net;
 }
 
+FeedForwardNetwork::FeedForwardNetwork(std::vector<int> p_layers, FeedForwardNetwork::Weights p_weights, Matrix<double> *p_thresholds)
+{
+    m_layers = p_layers;
+
+    for(int idx = 0; idx < p_weights.size(); idx++)
+    {
+        Matrix<double> *weight = new Matrix<double>(p_weights.at(idx)->getRowCount(), p_weights.at(idx)->getColCount());
+        for(int x = 0; x < p_weights.at(idx)->getRowCount(); x++)
+        {
+            for(int y = 0; y < p_weights.at(idx)->getColCount(); y++)
+            {
+                weight->setVal(p_weights.at(idx)->getVal(x, y), x, y);
+            }
+        }
+        m_weights.push_back(weight);
+    }
+
+    m_thresholds = new Matrix<double>(p_thresholds->getRowCount(), p_thresholds->getColCount());
+    for(int layerIdx = 0; layerIdx < p_thresholds->getRowCount(); layerIdx++)
+    {
+        for(int layer = 0; layer < p_thresholds->getColCount(); layer++)
+        {
+            m_thresholds->setVal(p_thresholds->getVal(layerIdx, layer), layerIdx, layer);
+        }
+    }
+}
+
 FeedForwardNetwork::FeedForwardNetwork(std::vector<int> p_layers)
 {
     std::mt19937 mt(QTime::currentTime().msec());

@@ -36,6 +36,15 @@
      <string>Trainieren</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuDatei">
+    <property name="title">
+     <string>Datei</string>
+    </property>
+    <addaction name="actionNeues_Netzwerk"/>
+    <addaction name="actionSpeichern"/>
+    <addaction name="actionLaden"/>
+   </widget>
+   <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
    <addaction name="menuTrainieren"/>
   </widget>
@@ -52,6 +61,21 @@
   <action name="actionF_ge_Ausgabe_Neuron_hinzu">
    <property name="text">
     <string>Füge Ausgabe-Neuron hinzu</string>
+   </property>
+  </action>
+  <action name="actionSpeichern">
+   <property name="text">
+    <string>Speichern</string>
+   </property>
+  </action>
+  <action name="actionLaden">
+   <property name="text">
+    <string>Laden</string>
+   </property>
+  </action>
+  <action name="actionNeues_Netzwerk">
+   <property name="text">
+    <string>Neues Netzwerk</string>
    </property>
   </action>
  </widget>

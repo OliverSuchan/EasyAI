@@ -29,6 +29,7 @@ private:
     static constexpr double LEARN_RATE = 3;
 
 public:
+    FeedForwardNetwork(std::vector<int> p_layers, Weights p_weights, Matrix<double> *p_thresholds);
     FeedForwardNetwork(std::vector<int> p_layers);
     void setInput(std::vector<double> p_input);
     void setOutput(std::vector<double> p_output);

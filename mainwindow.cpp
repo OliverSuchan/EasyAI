@@ -30,6 +30,38 @@ void MainWindow::paintEvent(QPaintEvent *)
     }
 }
 
+void MainWindow::initNetwork()
+{
+    for(NeuronWidget* neuron : m_neurons)
+    {
+        delete neuron;
+        neuron = nullptr;
+    }
+    m_neurons.clear();
+    int sum = 0;
+    for(int layerIdx = 0; layerIdx < m_FNN->m_layers.size(); layerIdx++)
+    {
+        sum = m_FNN->getStartIndex(layerIdx);
+        for(int neuronIdx = 0; neuronIdx < m_FNN->m_layers.at(layerIdx); neuronIdx++)
+        {
+            NeuronWidget *curNeuron;
+            if(layerIdx == 0)
+                curNeuron = new InputNeuron(this);
+            else if(layerIdx == m_FNN->m_layers.size() - 1)
+                curNeuron = new OutputNeuron(this);
+            else
+                curNeuron = new NeuronWidget(this);
+            curNeuron->setLayer(layerIdx);
+            curNeuron->setNeuron(sum + neuronIdx);
+            curNeuron->setGeometry(100 + layerIdx * 90, 50 + neuronIdx * 90, 46, 46);
+            curNeuron->show();
+            connect(curNeuron, &NeuronWidget::dragDrop, this, &MainWindow::execDrag);
+            m_neurons.push_back(curNeuron);
+        }
+    }
+    initConnections();
+}
+
 void MainWindow::initConnections()
 {
     m_connections.clear();
@@ -59,30 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
       ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    m_FNN = new FeedForwardNetwork({2, 4, 2, 2});
-    int sum = 0;
-    for(int layerIdx = 0; layerIdx < m_FNN->m_layers.size(); layerIdx++)
-    {
-        sum = m_FNN->getStartIndex(layerIdx);
-        for(int neuronIdx = 0; neuronIdx < m_FNN->m_layers.at(layerIdx); neuronIdx++)
-        {
-            NeuronWidget *curNeuron;
-            if(layerIdx == 0)
-                curNeuron = new InputNeuron(this);
-            else if(layerIdx == m_FNN->m_layers.size() - 1)
-                curNeuron = new OutputNeuron(this);
-            else
-                curNeuron = new NeuronWidget(this);
-            curNeuron->setLayer(layerIdx);
-            curNeuron->setNeuron(sum + neuronIdx);
-            curNeuron->setGeometry(100 + layerIdx * 90, 50 + neuronIdx * 90, 46, 46);
-            curNeuron->show();
-            connect(curNeuron, &NeuronWidget::dragDrop, this, &MainWindow::execDrag);
-            m_neurons.push_back(curNeuron);
-        }
-    }
-    initConnections();
+    m_dataIO = new DataIO();
 }
 
 MainWindow::~MainWindow()
@@ -96,4 +105,36 @@ void MainWindow::execDrag()
     dragNeuron->move(this->mapFromGlobal(QCursor::pos()));
     initConnections();
     this->repaint();
+}
+
+void MainWindow::createNetwork(QString p_network)
+{
+    QStringList layerCount = p_network.split(";");
+    std::vector<int> layers;
+    for(int i = 0; i < layerCount.size(); i++)
+        layers.push_back(layerCount[i].toInt());
+    m_FNN = new FeedForwardNetwork(layers);
+    initNetwork();
+    repaint();
+}
+
+void MainWindow::on_actionLaden_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Lade Künstliches Neuronales Netzwerk", QDir::currentPath(), "Neuronales Netzwerk (*.knn)");
+    m_FNN = m_dataIO->loadBinary(fileName.toStdString().c_str());
+    initNetwork();
+    repaint();
+}
+
+void MainWindow::on_actionSpeichern_triggered()
+{
+   QString fileName = QFileDialog::getSaveFileName(this, "Lade Künstliches Neuronales Netzwerk", QDir::currentPath(), "Neuronales Netzwerk (*.knn)");
+   m_dataIO->saveBinary(m_FNN->m_weights, m_FNN->m_thresholds, m_FNN->m_layers, fileName.toStdString().c_str());
+}
+
+void MainWindow::on_actionNeues_Netzwerk_triggered()
+{
+    CreateNetworkWindow *networkWindow = new CreateNetworkWindow(this);
+    connect(networkWindow, &CreateNetworkWindow::createNetwork, this, &MainWindow::createNetwork);
+    networkWindow->show();
 }
