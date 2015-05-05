@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>721</width>
+    <height>474</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>721</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuBearbeiten">
+    <property name="title">
+     <string>Bearbeiten</string>
+    </property>
+    <addaction name="actionF_ge_Schicht_hinzu"/>
+    <addaction name="actionF_ge_Input_Neuron_hintu"/>
+    <addaction name="actionF_ge_Ausgabe_Neuron_hinzu"/>
+   </widget>
+   <widget class="QMenu" name="menuTrainieren">
+    <property name="title">
+     <string>Trainieren</string>
+    </property>
+   </widget>
+   <addaction name="menuBearbeiten"/>
+   <addaction name="menuTrainieren"/>
+  </widget>
+  <action name="actionF_ge_Schicht_hinzu">
+   <property name="text">
+    <string>Füge Schicht hinzu</string>
+   </property>
+  </action>
+  <action name="actionF_ge_Input_Neuron_hintu">
+   <property name="text">
+    <string>Füge Input-Neuron hinzu</string>
+   </property>
+  </action>
+  <action name="actionF_ge_Ausgabe_Neuron_hinzu">
+   <property name="text">
+    <string>Füge Ausgabe-Neuron hinzu</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
