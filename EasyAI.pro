@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     setvaluewindow.cpp \
     ineuralobject.cpp \
     trainingwindow.cpp \
-    plotwidget.cpp
+    plotwidget.cpp \
+    evaluationwindow.cpp
 
 HEADERS  += mainwindow.hpp \
     ann/feedforwardnetwork.hpp \
@@ -39,12 +40,14 @@ HEADERS  += mainwindow.hpp \
     setvaluewindow.hpp \
     ineuralobject.hpp \
     trainingwindow.hpp \
-    plotwidget.hpp
+    plotwidget.hpp \
+    evaluationwindow.hpp
 
 FORMS    += mainwindow.ui \
     createnetworkwindow.ui \
     setvaluewindow.ui \
     trainingwindow.ui \
-    plotwidget.ui
+    plotwidget.ui \
+    evaluationwindow.ui
 
 INCLUDEPATH += ann

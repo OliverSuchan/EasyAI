@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QPaintEvent>
 #include <QMouseEvent>
+#include "evaluationwindow.hpp"
 #include "trainingwindow.hpp"
 #include "setvaluewindow.hpp"
 #include "createnetworkwindow.hpp"
@@ -48,6 +49,7 @@ private slots:
     void on_actionSpeichern_triggered();
     void on_actionNeues_Netzwerk_triggered();
     void on_actionNetzwerk_trainieren_triggered();
+    void on_actionBerechne_Ausgabe_triggered();
 };
 
 #endif // MAINWINDOW_HPP

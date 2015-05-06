@@ -173,3 +173,10 @@ void MainWindow::on_actionNetzwerk_trainieren_triggered()
     tw->show();
     connect(tw, &TrainingWindow::closed, this, &MainWindow::updateNetwork);
 }
+
+void MainWindow::on_actionBerechne_Ausgabe_triggered()
+{
+    EvaluationWindow *evalWindow = new EvaluationWindow(this);
+    evalWindow->setNetwork(m_FNN);
+    evalWindow->show();
+}

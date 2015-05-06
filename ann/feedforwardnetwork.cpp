@@ -7,14 +7,14 @@ double FeedForwardNetwork::getErrorSignal(std::size_t p_idxNeuron)
     double firstFactor = ACTIVATE_DERIVED(getInput(p_idxNeuron));
     double secondFactor;
     std::size_t layerNum = getLayer(p_idxNeuron);
-    if(layerNum == m_layers.size() - 1)
+    if(layerNum >= m_layers.size() - 1)
     {
         secondFactor = m_outputs.at(p_idxNeuron - getStartIndex(layerNum)) - getOutput(p_idxNeuron);
     }
     else
     {
         int startIdx = getStartIndex(layerNum + 1);
-        int weightIdx = (layerNum + 1) / 2;
+        int weightIdx = (layerNum + 2) / 2.;
         for(int idx = 0; idx < m_weights.at(weightIdx)->getColCount(); idx++)
         {
             secondFactor += getErrorSignal(startIdx + idx) * m_weights.at(weightIdx)->getVal(p_idxNeuron - getStartIndex(layerNum), idx);
@@ -37,8 +37,11 @@ std::size_t FeedForwardNetwork::getLayer(std::size_t p_idxNeuron)
     int sum = 0;
     for(std::size_t idx = 0; idx < m_layers.size(); idx++)
     {
-        if(p_idxNeuron >= sum && p_idxNeuron < (sum += m_layers.at(idx)))
+        if(p_idxNeuron >= sum && p_idxNeuron < (sum + m_layers.at(idx)))
+        {
             return idx;
+        }
+        sum += m_layers.at(idx);
     }
 }
 
@@ -110,6 +113,7 @@ FeedForwardNetwork::FeedForwardNetwork(std::vector<int> p_layers)
     LEARN_RATE.store(0.7);
     std::mt19937 mt(QTime::currentTime().msec());
     std::uniform_real_distribution<double> dist(0, 1);
+    std::uniform_real_distribution<double> dist2(0, 5);
     if(p_layers.size() > 1)
     {
         m_layers = p_layers;
@@ -141,7 +145,7 @@ FeedForwardNetwork::FeedForwardNetwork(std::vector<int> p_layers)
         {
             for(std::size_t neuron = 0; neuron < p_layers.at(layer); neuron++)
             {
-                m_thresholds->setVal(dist(mt), layer, neuron);
+                m_thresholds->setVal(dist2(mt), layer, neuron);
 //                std::cout << m_thresholds->getVal(layer, neuron) << " ";
             }
 //            std::cout << std::endl;
