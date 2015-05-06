@@ -4,6 +4,7 @@
 void TrainingWindow::setNetwork(FeedForwardNetwork *p_network)
 {
     m_FNN = p_network;
+    this->ui->label_2->setText(QString::number(m_FNN->LEARN_RATE.load()));
     this->ui->horizontalSlider->setValue(m_FNN->LEARN_RATE.load() * 100.);
     this->ui->tableWidget->insertRow(0);
     for(int i = 0; i < m_FNN->m_layers.at(0); i++)
@@ -71,8 +72,8 @@ void TrainingWindow::on_pushButton_2_clicked()
 
 void TrainingWindow::on_horizontalSlider_valueChanged(int value)
 {
-    if(!m_train.load())
-        m_FNN->LEARN_RATE.store(value / 100.);
+    m_FNN->LEARN_RATE.store(value / 100.);
+    this->ui->horizontalSlider->setValue(m_FNN->LEARN_RATE.load() * 100.);
 }
 
 void TrainingWindow::on_pushButton_5_clicked()
