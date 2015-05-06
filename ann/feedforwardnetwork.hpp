@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <random>
+#include <atomic>
 #include <cmath>
 #include <QTime>
 #include "matrix.hpp"
@@ -15,6 +16,7 @@ class FeedForwardNetwork
     friend class MainWindow;
     friend class Connection;
     friend class NeuronWidget;
+    friend class TrainingWindow;
 
 private:
     typedef std::vector<Matrix<double>*> Weights;
@@ -28,7 +30,7 @@ private:
     double getThreshold(std::size_t p_idxNeuron);
     double getOutput(std::size_t p_idxNeuron);
     double getInput(std::size_t p_idxNeuron);
-    static constexpr double LEARN_RATE = 3;
+    static std::atomic<double> LEARN_RATE;
 
 public:
     FeedForwardNetwork(std::vector<int> p_layers, Weights p_weights, Matrix<double> *p_thresholds);

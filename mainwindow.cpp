@@ -140,6 +140,11 @@ void MainWindow::neuralObjectClicked()
     setValWin->show();
 }
 
+void MainWindow::updateNetwork()
+{
+    initNetwork();
+}
+
 void MainWindow::on_actionLaden_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Lade Künstliches Neuronales Netzwerk", QDir::currentPath(), "Neuronales Netzwerk (*.knn)");
@@ -159,4 +164,12 @@ void MainWindow::on_actionNeues_Netzwerk_triggered()
     CreateNetworkWindow *networkWindow = new CreateNetworkWindow(this);
     connect(networkWindow, &CreateNetworkWindow::createNetwork, this, &MainWindow::createNetwork);
     networkWindow->show();
+}
+
+void MainWindow::on_actionNetzwerk_trainieren_triggered()
+{
+    TrainingWindow *tw = new TrainingWindow(this);
+    tw->setNetwork(m_FNN);
+    tw->show();
+    connect(tw, &TrainingWindow::closed, this, &MainWindow::updateNetwork);
 }

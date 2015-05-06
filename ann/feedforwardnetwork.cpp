@@ -1,5 +1,7 @@
 #include "feedforwardnetwork.hpp"
 
+std::atomic<double> FeedForwardNetwork::LEARN_RATE;
+
 double FeedForwardNetwork::getErrorSignal(std::size_t p_idxNeuron)
 {
     double firstFactor = ACTIVATE_DERIVED(getInput(p_idxNeuron));
@@ -76,6 +78,8 @@ double FeedForwardNetwork::getInput(std::size_t p_idxNeuron)
 
 FeedForwardNetwork::FeedForwardNetwork(std::vector<int> p_layers, FeedForwardNetwork::Weights p_weights, Matrix<double> *p_thresholds)
 {
+    LEARN_RATE.store(0.7);
+
     m_layers = p_layers;
 
     for(int idx = 0; idx < p_weights.size(); idx++)
@@ -103,6 +107,7 @@ FeedForwardNetwork::FeedForwardNetwork(std::vector<int> p_layers, FeedForwardNet
 
 FeedForwardNetwork::FeedForwardNetwork(std::vector<int> p_layers)
 {
+    LEARN_RATE.store(0.7);
     std::mt19937 mt(QTime::currentTime().msec());
     std::uniform_real_distribution<double> dist(0, 1);
     if(p_layers.size() > 1)
@@ -174,7 +179,7 @@ void FeedForwardNetwork::optimize()
                 int i = sum + xIdx;
                 int j = sum + m_weights.at(weightsIdx)->getRowCount() + yIdx;
                 double curWeight = m_weights.at(weightsIdx)->getVal(xIdx, yIdx);
-                double deltaWeight = LEARN_RATE * getErrorSignal(j) * getOutput(i);
+                double deltaWeight = LEARN_RATE.load() * getErrorSignal(j) * getOutput(i);
                 m_weights.at(weightsIdx)->setVal(curWeight + deltaWeight, xIdx, yIdx);
             }
         }

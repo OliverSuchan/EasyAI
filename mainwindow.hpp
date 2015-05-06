@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QPaintEvent>
 #include <QMouseEvent>
+#include "trainingwindow.hpp"
 #include "setvaluewindow.hpp"
 #include "createnetworkwindow.hpp"
 #include "feedforwardnetwork.hpp"
@@ -42,9 +43,11 @@ private slots:
     void execDrag();
     void createNetwork(QString p_network);
     void neuralObjectClicked();
+    void updateNetwork();
     void on_actionLaden_triggered();
     void on_actionSpeichern_triggered();
     void on_actionNeues_Netzwerk_triggered();
+    void on_actionNetzwerk_trainieren_triggered();
 };
 
 #endif // MAINWINDOW_HPP

@@ -35,6 +35,7 @@
     <property name="title">
      <string>Trainieren</string>
     </property>
+    <addaction name="actionNetzwerk_trainieren"/>
    </widget>
    <widget class="QMenu" name="menuDatei">
     <property name="title">
@@ -76,6 +77,11 @@
   <action name="actionNeues_Netzwerk">
    <property name="text">
     <string>Neues Netzwerk</string>
+   </property>
+  </action>
+  <action name="actionNetzwerk_trainieren">
+   <property name="text">
+    <string>Netzwerk trainieren</string>
    </property>
   </action>
  </widget>
