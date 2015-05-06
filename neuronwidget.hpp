@@ -6,8 +6,9 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPaintEvent>
+#include "ineuralobject.hpp"
 
-class NeuronWidget : public QWidget
+class NeuronWidget : public INeuralObject
 {
     Q_OBJECT
 
@@ -17,11 +18,13 @@ protected:
     std::atomic<int> m_layer;
     std::atomic<int> m_neuronIdx;
     QColor m_neuronColor;
+    QColor m_borderColor;
     void paintEvent(QPaintEvent *);
     void leaveEvent(QEvent *);
     void enterEvent(QEvent *);
     void mouseMoveEvent(QMouseEvent *p_mouseEvent);
-    void mousePressEvent(QMouseEvent *p_mouseEvent);
+    void mouseDoubleClickEvent(QMouseEvent *p_mouseEvent);
+    void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
 
 public:
@@ -30,6 +33,7 @@ public:
     int getLayer();
     void setNeuron(int p_neuronIdx);
     int getNeuron();
+    void setVal(double p_val) override;
     ~NeuronWidget();
 
 signals:

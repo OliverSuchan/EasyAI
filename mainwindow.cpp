@@ -3,11 +3,10 @@
 
 void MainWindow::mousePressEvent(QMouseEvent *p_mouseEvent)
 {
-    for(Connection& con : m_connections)
+    for(Connection* con : m_connections)
     {
-        if(con.contains(p_mouseEvent->localPos()))
+        if(con->contains(p_mouseEvent->localPos()))
         {
-            con.setPenWidth(Connection::MOUSE_OVER);
             repaint();
             return;
         }
@@ -21,12 +20,12 @@ void MainWindow::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(Qt::black);
     QPen pen;
-    pen.setBrush(Qt::black);
-    for(Connection con : m_connections)
+    for(Connection* con : m_connections)
     {
-        pen.setWidth(con.penWidth());
+        pen.setBrush(con->drawColor());
+        pen.setWidth(con->penWidth());
         painter.setPen(pen);
-        painter.drawLine(con.startPos(), con.endPos());
+        painter.drawLine(con->startPos(), con->endPos());
     }
 }
 
@@ -51,11 +50,16 @@ void MainWindow::initNetwork()
                 curNeuron = new OutputNeuron(this);
             else
                 curNeuron = new NeuronWidget(this);
+
+            curNeuron->m_FNN = m_FNN;
             curNeuron->setLayer(layerIdx);
             curNeuron->setNeuron(sum + neuronIdx);
+            curNeuron->setVal(m_FNN->getThreshold(sum + neuronIdx));
             curNeuron->setGeometry(100 + layerIdx * 90, 50 + neuronIdx * 90, 46, 46);
             curNeuron->show();
+
             connect(curNeuron, &NeuronWidget::dragDrop, this, &MainWindow::execDrag);
+            connect(curNeuron, &INeuralObject::clicked, this, &MainWindow::neuralObjectClicked);
             m_neurons.push_back(curNeuron);
         }
     }
@@ -64,6 +68,11 @@ void MainWindow::initNetwork()
 
 void MainWindow::initConnections()
 {
+    for(Connection* con : m_connections)
+    {
+        delete con;
+        con = nullptr;
+    }
     m_connections.clear();
     int sum = 0;
     for(std::size_t weightsIdx = 0; weightsIdx < m_FNN->m_weights.size(); weightsIdx++)
@@ -77,7 +86,11 @@ void MainWindow::initConnections()
                 NeuronWidget *firstNeuron = m_neurons.at(i);
                 NeuronWidget *secondNeuron = m_neurons.at(j);
 
-                Connection con(firstNeuron->pos() + QPoint(firstNeuron->size().width() / 2, firstNeuron->size().height() / 2), secondNeuron->pos() + QPoint(secondNeuron->size().width() / 2, secondNeuron->size().height() / 2));
+                Connection* con = new Connection(firstNeuron, secondNeuron);
+                con->m_FNN = m_FNN;
+                con->setIndices(weightsIdx, xIdx, yIdx);
+                con->setVal(m_FNN->m_weights.at(weightsIdx)->getVal(xIdx, yIdx));
+                connect(con, &INeuralObject::clicked, this, &MainWindow::neuralObjectClicked);
                 m_connections.push_back(con);
             }
         }
@@ -103,7 +116,7 @@ void MainWindow::execDrag()
 {
     QWidget *dragNeuron = dynamic_cast<QWidget*>(sender());
     dragNeuron->move(this->mapFromGlobal(QCursor::pos()));
-    initConnections();
+    //initConnections();
     this->repaint();
 }
 
@@ -118,6 +131,15 @@ void MainWindow::createNetwork(QString p_network)
     repaint();
 }
 
+void MainWindow::neuralObjectClicked()
+{
+    SetValueWindow *setValWin = new SetValueWindow(this);
+    INeuralObject *neuralObj = dynamic_cast<INeuralObject*>(sender());
+    setValWin->setCurVal(QString::number(neuralObj->getVal()));
+    connect(setValWin, &SetValueWindow::changeValue, neuralObj, &INeuralObject::changeValue);
+    setValWin->show();
+}
+
 void MainWindow::on_actionLaden_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Lade Künstliches Neuronales Netzwerk", QDir::currentPath(), "Neuronales Netzwerk (*.knn)");
@@ -128,7 +150,7 @@ void MainWindow::on_actionLaden_triggered()
 
 void MainWindow::on_actionSpeichern_triggered()
 {
-   QString fileName = QFileDialog::getSaveFileName(this, "Lade Künstliches Neuronales Netzwerk", QDir::currentPath(), "Neuronales Netzwerk (*.knn)");
+   QString fileName = QFileDialog::getSaveFileName(this, "Speichere Künstliches Neuronales Netzwerk", QDir::currentPath(), "Neuronales Netzwerk (*.knn)");
    m_dataIO->saveBinary(m_FNN->m_weights, m_FNN->m_thresholds, m_FNN->m_layers, fileName.toStdString().c_str());
 }
 

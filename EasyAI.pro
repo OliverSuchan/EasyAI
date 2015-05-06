@@ -20,9 +20,10 @@ SOURCES += main.cpp\
     inputneuron.cpp \
     outputneuron.cpp \
     connection.cpp \
-    inputneuronwindow.cpp \
     ann/dataio.cpp \
-    createnetworkwindow.cpp
+    createnetworkwindow.cpp \
+    setvaluewindow.cpp \
+    ineuralobject.cpp
 
 HEADERS  += mainwindow.hpp \
     ann/feedforwardnetwork.hpp \
@@ -31,12 +32,13 @@ HEADERS  += mainwindow.hpp \
     inputneuron.hpp \
     outputneuron.hpp \
     connection.hpp \
-    inputneuronwindow.hpp \
     ann/dataio.hpp \
-    createnetworkwindow.hpp
+    createnetworkwindow.hpp \
+    setvaluewindow.hpp \
+    ineuralobject.hpp
 
 FORMS    += mainwindow.ui \
-    inputneuronwindow.ui \
-    createnetworkwindow.ui
+    createnetworkwindow.ui \
+    setvaluewindow.ui
 
 INCLUDEPATH += ann

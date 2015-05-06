@@ -13,6 +13,8 @@
 class FeedForwardNetwork
 {
     friend class MainWindow;
+    friend class Connection;
+    friend class NeuronWidget;
 
 private:
     typedef std::vector<Matrix<double>*> Weights;

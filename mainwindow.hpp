@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QPaintEvent>
 #include <QMouseEvent>
+#include "setvaluewindow.hpp"
 #include "createnetworkwindow.hpp"
 #include "feedforwardnetwork.hpp"
 #include "connection.hpp"
@@ -24,7 +25,7 @@ class MainWindow : public QMainWindow
 
 private:
     DataIO *m_dataIO;
-    std::vector<Connection> m_connections;
+    std::vector<Connection*> m_connections;
     FeedForwardNetwork *m_FNN;
     std::vector<NeuronWidget*> m_neurons;
     Ui::MainWindow *ui;
@@ -37,11 +38,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-public slots:
+private slots:
     void execDrag();
     void createNetwork(QString p_network);
-
-private slots:
+    void neuralObjectClicked();
     void on_actionLaden_triggered();
     void on_actionSpeichern_triggered();
     void on_actionNeues_Netzwerk_triggered();
