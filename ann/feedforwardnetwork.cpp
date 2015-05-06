@@ -210,6 +210,14 @@ void FeedForwardNetwork::addNeuron(int p_layer, int p_idxInLayer, double p_thres
      }
 }
 
+void FeedForwardNetwork::addLayer(int p_idxOfLayer, int p_nrNewNeurons, std::vector<double> p_thresholds){
+    std::vector<int>::iterator it = m_layers.begin();
+    m_layers.insert(it+p_idxOfLayer, p_nrNewNeurons);
+    for(int i = 0; i < p_nrNewNeurons; i++){
+        this->addNeuron(p_idxOfLayer, i, p_thresholds.at(i));
+    }
+}
+
 
 void FeedForwardNetwork::optimize()
 {

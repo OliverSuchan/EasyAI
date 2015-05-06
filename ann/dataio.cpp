@@ -19,8 +19,8 @@ void DataIO::saveBinary(Weights p_weights, Matrix<double> *p_thresholds, std::ve
     //file-header
     out << (qint32)p_layers.size();
     out << (qint32)p_weights.size();
-    out << p_thresholds->getRowCount();
-    out << p_thresholds->getColCount();
+    out << (qint32)p_thresholds->getRowCount();
+    out << (qint32)p_thresholds->getColCount();
     for(int i = 0; i < p_weights.size(); i++)
     {
         out << (qint32)p_weights.at(i)->getColCount();
