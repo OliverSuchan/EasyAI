@@ -162,6 +162,55 @@ void FeedForwardNetwork::setOutput(std::vector<double> p_output)
     m_outputs = p_output;
 }
 
+void FeedForwardNetwork::addNeuron(int p_layer, int p_idxInLayer, double p_threshold){
+    std::mt19937 mt(QTime::currentTime().msec());
+    std::uniform_real_distribution<double> dist(0, 1);
+
+
+    m_layers[p_layer]++;
+
+    Matrix<double> *m = new Matrix<double>(m_thresholds->getRowCount()+1, m_thresholds->getColCount());
+    for(int x = 0; x < m->getColCount(); x++){
+        for(int y = 0; m->getRowCount(); y++){
+            if(x == p_layer && y == p_idxInLayer){
+                m->setVal(p_threshold, p_layer, p_idxInLayer);
+            } else {
+                m->setVal(m_thresholds->getVal(x,y),x,y);
+            }
+        }
+     }
+     m_thresholds = m;
+
+     if(!p_layer == m_layers.size()){
+        Matrix<double> *mGreaterX = new Matrix<double>(m_weights.at(p_layer)->getRowCount(), m_weights.at(p_layer)->getColCount()+1);
+         for(int x = 0; x < mGreaterX->getColCount(); x++){
+             for(int y = 0; y < mGreaterX->getRowCount(); y++){
+                if(x == m_weights.at(p_layer)->getColCount()+1){
+                    mGreaterX->setVal(dist(mt), x, y);
+               } else {
+                   mGreaterX->setVal(m_weights.at(p_layer)->getVal(x, y), x, y);
+              }
+          }
+      }
+     m_weights[p_layer] = mGreaterX;
+     }
+
+     if(!p_layer == 0){
+         Matrix<double> *mGreaterY = new Matrix<double>(m_weights.at(p_layer-1)->getRowCount()+1, m_weights.at(p_layer-1)->getColCount());
+         for(int x = 0; x < mGreaterY->getColCount(); x++){
+             for(int y = 0; y < mGreaterY->getRowCount(); y++){
+                 if(y == m_weights.at(p_layer-1)->getRowCount()+1){
+                     mGreaterY->setVal(dist(mt), x, y);
+                 } else {
+                     mGreaterY->setVal(m_weights.at(p_layer-1)->getVal(x, y), x ,y);
+                 }
+             }
+         }
+     m_weights[p_layer-1] = mGreaterY;
+     }
+}
+
+
 void FeedForwardNetwork::optimize()
 {
     int sum = 0;
@@ -191,3 +240,5 @@ double FeedForwardNetwork::getError()
     }
     return sum * .5;
 }
+
+

@@ -13,8 +13,6 @@
 class FeedForwardNetwork
 {
     friend class MainWindow;
-    friend class Connection;
-    friend class NeuronWidget;
 
 private:
     typedef std::vector<Matrix<double>*> Weights;
@@ -35,6 +33,8 @@ public:
     FeedForwardNetwork(std::vector<int> p_layers);
     void setInput(std::vector<double> p_input);
     void setOutput(std::vector<double> p_output);
+    void addLayer(int idxOfLayer, int nrNewNeurons, std::vector<double> thresholds);
+    void addNeuron(int p_layer, int p_idxInLayer, double p_threshold);
     void optimize();
     double getError();
 
