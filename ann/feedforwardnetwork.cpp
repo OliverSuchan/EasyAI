@@ -53,7 +53,6 @@ double FeedForwardNetwork::getThreshold(std::size_t p_idxNeuron)
 
 double FeedForwardNetwork::getOutput(std::size_t p_idxNeuron)
 {
-
     double net = getInput(p_idxNeuron);
     double threshold = getThreshold(p_idxNeuron);
     return ACTIVATE((net - threshold));
@@ -61,22 +60,36 @@ double FeedForwardNetwork::getOutput(std::size_t p_idxNeuron)
 
 double FeedForwardNetwork::getInput(std::size_t p_idxNeuron)
 {
+    //double net = .0;
     double net = .0;
     int curLayerNum = getLayer(p_idxNeuron);
-    int layerNum = curLayerNum - 1;
-    if(layerNum < 0)
+    if(curLayerNum == 0)
         return getThreshold(p_idxNeuron);
-    int startIdx = getStartIndex(layerNum);
-    int weightIdx = layerNum / 2;
-    if((curLayerNum + 1) % 2 != 0)
-        weightIdx = curLayerNum / 2;
+    int startIdx = getStartIndex(curLayerNum - 1);
+    int weightIdx = curLayerNum / 2;
     for(int idx = 0; idx < m_weights.at(weightIdx)->getRowCount(); idx++)
     {
-        double output = getOutput(startIdx + idx);
-        double weight = m_weights.at(weightIdx)->getVal(idx, p_idxNeuron - (startIdx + m_weights.at(weightIdx)->getRowCount()));
-        net += output * weight;
+        net += getOutput(startIdx + idx) * m_weights.at(weightIdx)->getVal(idx, p_idxNeuron - getStartIndex(curLayerNum));
     }
     return net;
+
+
+//    double net = .0;
+//    int curLayerNum = getLayer(p_idxNeuron);
+//    int layerNum = curLayerNum - 1;
+//    if(layerNum < 0)
+//        return getThreshold(p_idxNeuron);
+//    int startIdx = getStartIndex(layerNum);
+//    int weightIdx = curLayerNum / 2;
+////    if((curLayerNum + 1) % 2 != 0)
+////        weightIdx = curLayerNum / 2;
+//    for(int idx = 0; idx < m_weights.at(weightIdx)->getRowCount(); idx++)
+//    {
+//        double output = getOutput(startIdx + idx);
+//        double weight = m_weights.at(weightIdx)->getVal(idx, p_idxNeuron - (startIdx + m_weights.at(weightIdx)->getRowCount()));
+//        net += output * weight;
+//    }
+//    return net;
 }
 
 FeedForwardNetwork::FeedForwardNetwork(std::vector<int> p_layers, FeedForwardNetwork::Weights p_weights, Matrix<double> *p_thresholds)

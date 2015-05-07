@@ -39,25 +39,23 @@ void EvaluationWindow::on_pushButton_2_clicked()
 
 void EvaluationWindow::on_pushButton_3_clicked()
 {
-//    this->ui->tableWidget_2->clear();
-//    this->ui->tableWidget_2->setRowCount(0);
-//    for(int rowIdx = 0; rowIdx < this->ui->tableWidget->rowCount(); rowIdx++)
-//    {
-//        std::vector<double> input;
-//        for(int colIdx = 0; colIdx < this->ui->tableWidget->columnCount(); colIdx++)
-//        {
-//            input.push_back(this->ui->tableWidget->item(rowIdx, colIdx)->text().toDouble());
-//            std::cout << "input: " << input.at(colIdx) << std::endl;
-//        }
-//        m_FNN->setInput(input);
+    this->ui->tableWidget_2->clear();
+    this->ui->tableWidget_2->setRowCount(0);
+    for(int rowIdx = 0; rowIdx < this->ui->tableWidget->rowCount(); rowIdx++)
+    {
+        std::vector<double> input;
+        for(int colIdx = 0; colIdx < this->ui->tableWidget->columnCount(); colIdx++)
+        {
+            input.push_back(this->ui->tableWidget->item(rowIdx, colIdx)->text().toDouble());
+        }
+        m_FNN->setInput(input);
 
-//        this->ui->tableWidget_2->insertRow(this->ui->tableWidget_2->rowCount());
-//        for(int outputIdx = 0; outputIdx < this->ui->tableWidget_2->columnCount(); outputIdx++)
-//        {
+        this->ui->tableWidget_2->insertRow(this->ui->tableWidget_2->rowCount());
+        for(int outputIdx = 0; outputIdx < this->ui->tableWidget_2->columnCount(); outputIdx++)
+        {
 
-//            int neuronIdx = outputIdx + m_FNN->getStartIndex(m_FNN->m_layers.size() - 1);
-//            std::cout << m_FNN->getOutput(neuronIdx) << std::endl;
-//            this->ui->tableWidget_2->setItem(rowIdx, outputIdx, new QTableWidgetItem(QString::number(m_FNN->getOutput(neuronIdx))));
-//        }
-//    }
+            int neuronIdx = outputIdx + m_FNN->getStartIndex(m_FNN->m_layers.size() - 1);
+            this->ui->tableWidget_2->setItem(rowIdx, outputIdx, new QTableWidgetItem(QString::number(m_FNN->getOutput(neuronIdx))));
+        }
+    }
 }
